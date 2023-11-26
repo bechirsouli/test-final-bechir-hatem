@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "${DB_PASS}"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  app:
+    image: sbapp:1
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/${DB_NAME}"
+      SPRING_DATASOURCE_USERNAME: "${DB_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${DB_PASS}"
+
